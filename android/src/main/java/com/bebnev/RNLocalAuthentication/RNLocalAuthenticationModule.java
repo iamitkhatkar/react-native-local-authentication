@@ -1,11 +1,12 @@
 package com.bebnev.RNLocalAuthentication;
 
+import static androidx.biometric.BiometricPrompt.ERROR_NEGATIVE_BUTTON;
+import static androidx.biometric.BiometricPrompt.ERROR_USER_CANCELED;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.biometric.BiometricManager;
-import static androidx.biometric.BiometricConstants.ERROR_NEGATIVE_BUTTON;
-import static androidx.biometric.BiometricConstants.ERROR_USER_CANCELED;
 import java.util.concurrent.Executor;
 
 import com.facebook.react.bridge.ReadableMap;
@@ -124,7 +125,7 @@ public class RNLocalAuthenticationModule extends ReactContextBaseJavaModule {
                     release();
                 } else if (errorCode == ERROR_USER_CANCELED && !fallbackEnabled && biometricPrompt != null ) {
                     biometricPrompt.cancelAuthentication();
-                    p.resolve(makeAuthorizationResponse(false, BiometricPrompt.ERROR_NEGATIVE_BUTTON));
+                    p.resolve(makeAuthorizationResponse(false, ERROR_NEGATIVE_BUTTON));
                     release();
                     return;
                 }
@@ -274,7 +275,7 @@ public class RNLocalAuthenticationModule extends ReactContextBaseJavaModule {
             /**
              * The user pressed the negative button.
              */
-            case BiometricPrompt.ERROR_NEGATIVE_BUTTON:
+            case ERROR_NEGATIVE_BUTTON:
                 return "UserCancel";
             /**
              * The device does not have pin, pattern, or password set up.
@@ -304,7 +305,7 @@ public class RNLocalAuthenticationModule extends ReactContextBaseJavaModule {
              * authentication (e.g. a password). The application should also provide the means to return to
              * biometric authentication, such as a "use <biometric>" button.
              */
-            case BiometricPrompt.ERROR_USER_CANCELED:
+            case ERROR_USER_CANCELED:
                 return "UserFallback";
             /**
              * Hardware vendors may extend this list if there are conditions that do not fall under one of
